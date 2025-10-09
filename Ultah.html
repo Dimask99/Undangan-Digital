@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Undangan Ulang Tahun 🎉</title>
+<style>
+    body {
+    font-family: 'Comic Sans MS', cursive;
+    background: linear-gradient(to bottom right, #ff9a9e, #fad0c4, #fbc2eb);
+    margin: 0;
+    text-align: center;
+    color: #333;
+    overflow-x: hidden;
+    }
+    h1 {
+    color: #ff4081;
+    font-size: 2.5em;
+    margin-top: 30px;
+    }
+    h2 {
+    color: #ff9800;
+    }
+    .card {
+    background: white;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 25px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    max-width: 500px;
+    position: relative;
+    z-index: 10;
+    }
+    img.photo {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    object-fit: cover;
+    margin-top: 20px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    p {
+    font-size: 1.1em;
+    }
+    .button {
+    background-color: #ff4081;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 15px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.2s;
+    }
+    .button:hover {
+    background-color: #e73370;
+    transform: scale(1.05);
+    }
+    .whatsapp {
+    background-color: #25D366;
+    margin-top: 15px;
+    }
+    .whatsapp:hover {
+    background-color: #1da955;
+    }
+    footer {
+    margin: 30px 0;
+    font-size: 0.9em;
+    color: #555;
+    }
+
+    /* 🎈 Animasi balon */
+    .balloon {
+    position: absolute;
+    bottom: -150px;
+    animation: float 8s infinite ease-in;
+    }
+    @keyframes float {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(-900px) rotate(20deg); opacity: 0; }
+    }
+</style>
+</head>
+<body>
+<!-- 🎵 Musik Ulang Tahun -->
+<audio id="bg-music" autoplay loop>
+    <source src="HappyBirthday.mp3" type="audio/mp3">
+</audio>
+
+<!-- 🎈 Balon animasi -->
+<img src="img/Balon 1.png" class="balloon" style="left:10%; animation-delay:0s; width:90px;">
+<img src="img/Balon 1.png" class="balloon" style="left:40%; animation-delay:2s; width:90px;">
+<img src="img/Balon 2.png" class="balloon" style="left:70%; animation-delay:4s; width:90px;">
+
+<h1>🎉 Undangan Ulang Tahun 🎂</h1>
+<img src="img/Amora 2.jpg" alt="Foto Anak" class="photo">
+<p>Hai teman-teman! Aku mau ulang tahun nih, datang ya ke pestaku! 🥳</p>
+
+<div class="card">
+    <h2>🎈 Nama: <span style="color:#333;">Amora Khanza Farhana </span></h2>
+    <p>✨ Usia: 3 Tahun</p>
+    <p>📅 Hari/Tanggal: Sabtu, 11 Oktober 2025</p>
+    <p>🕒 Pukul: 10.00 - 13.00 WIB</p>
+    <p>📍 Tempat: Rumah Rafa, Gg. M. nur No.53 Batu Ampar Kramat Jati Jak-Tim</p>
+    <p>Akan ada balon, kue, permainan, dan banyak hadiah! 🎁</p>
+    <button class="button" onclick="alert('Terima kasih sudah konfirmasi! Sampai jumpa di pestaku 🎉')">Konfirmasi Kehadiran</button>
+
+    <!-- Tombol WhatsApp -->
+    <button class="button whatsapp" onclick="shareWhatsApp()">📱 Bagikan lewat WhatsApp</button>
+</div>
+
+
+
+<footer>
+    <p>Terima kasih sudah jadi bagian dari hari spesialku 💕</p>
+    <p>#Amora3thBirthday #PestaCeria</p>
+<footer>
+    <p>Terima kasih sudah jadi bagian dari hari spesialku 💕</p>
+    <p>#Amora3thBirthday #PestaCeria</p>
+</footer>
+
+<script>
+    function shareWhatsApp() {
+    const url = window.location.href;
+    const pesan = encodeURIComponent('Hai! Yuk datang ke pesta ulang tahunku 🎉🥳\n\n📅 Minggu, 20 Oktober 2025\n🕒 10.00 - 13.00 WIB\n📍 Rumah Rafa, Jl. Mawar No. 45, Yogyakarta\n\nKlik undangannya di sini: ' + url);
+    window.open('https://wa.me/?text=' + pesan, '_blank');
+    }
+</script>
+</body>
+</html>
