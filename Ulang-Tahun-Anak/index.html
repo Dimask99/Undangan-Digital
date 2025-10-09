@@ -128,5 +128,11 @@
     window.open('https://wa.me/?text=' + pesan, '_blank');
     }
 </script>
+<script>
+  const music = document.getElementById("bg-music");
+  document.body.addEventListener('click', () => {
+    music.play();
+  }, { once: true });
+</script>
 </body>
 </html>
