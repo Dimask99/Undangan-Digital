@@ -76,19 +76,69 @@
   </div>
 
   <script>
-  document.getElementById("assetForm").addEventListener("submit", async function(e){
-    e.preventDefault();
-    const formData = new FormData(this);
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQVKEwcH16-NefLGTNsYz8vSL9d5MytZsVkt1ZOHJqa34tZCxxbjjQbZfukn6AuM05/exec"; // ganti kalau beda
 
-    const response = await fetch("https://script.google.com/macros/s/AKfycbzQVKEwcH16-NefLGTNsYz8vSL9d5MytZsVkt1ZOHJqa34tZCxxbjjQbZfukn6AuM05/exec", {
+document.getElementById("assetForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  const form = this;
+  const fileInput = form.querySelector('input[name="foto"]');
+  const file = fileInput && fileInput.files && fileInput.files[0];
+
+  // batas ukuran (opsional) -> 2MB
+  if (file && file.size > 2 * 1024 * 1024) {
+    alert("File terlalu besar. Maks 2MB.");
+    return;
+  }
+
+  // fungsi helper: read file -> base64
+  async function fileToBase64(f) {
+    return await new Promise((resolve, reject) => {
+      if (!f) return resolve("");
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result; // "data:image/..;base64,AAAA..."
+        const base64 = result.split(",")[1]; // ambil bagian base64
+        resolve(base64);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(f);
+    });
+  }
+
+  const fotoBase64 = await fileToBase64(file);
+
+  const payload = {
+    tanggal: form.tanggal.value,
+    item: form.item.value,
+    qty: form.qty.value,
+    keterangan: form.keterangan.value,
+    foto: fotoBase64
+  };
+
+  try {
+    const res = await fetch(SCRIPT_URL, {
       method: "POST",
-      body: formData
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
     });
 
-    const result = await response.text();
-    alert(result);
-    this.reset();
-  });
-  </script>
+    const txt = await res.text();
+    // respon JSON dari Apps Script
+    let obj;
+    try { obj = JSON.parse(txt); } catch(e) { obj = { status: "unknown", message: txt }; }
+
+    if (obj.status && obj.status === "ok") {
+      alert("✅ Sukses: " + (obj.message || "Data tersimpan"));
+      form.reset();
+    } else {
+      alert("❌ Gagal: " + (obj.message || txt));
+    }
+  } catch (err) {
+    alert("Error koneksi: " + err.message);
+  }
+});
+</script>
+
 </body>
 </html>
