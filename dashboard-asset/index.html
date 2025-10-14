@@ -12,24 +12,24 @@
   <div class="container">
     <h1>📦 Dashboard Barang</h1>
     <form id="formData">
-  <label>Tanggal</label>
-  <input type="date" id="tanggal" required>
+   <label>Tanggal</label>
+   <input type="date" id="tanggal" required>
 
-  <label>Item</label>
-  <input type="text" id="item" placeholder="Nama barang" required>
+   <label>Item</label>
+   <input type="text" id="item" placeholder="Nama barang" required>
 
-  <label>Qty</label>
-  <input type="number" id="qty" placeholder="Jumlah" required>
+   <label>Qty</label>
+   <input type="number" id="qty" placeholder="Jumlah" required>
 
-  <label>Keterangan</label>
-  <textarea id="keterangan" placeholder="Masuk / Keluar / Catatan lain"></textarea>
+   <label>Keterangan</label>
+   <textarea id="keterangan" placeholder="Masuk / Keluar / Catatan lain"></textarea>
 
-  <!-- 🔹 Tambahan untuk upload gambar -->
-  <label>Upload Foto Barang (opsional)</label>
-  <input type="file" id="gambar" accept="image/*">
+   <label>Foto Barang</label>
+   <input type="file" id="foto" accept="image/*" capture="environment">
 
-  <button type="submit">Simpan</button>
+   <button type="submit">Simpan</button>
 </form>
+
 
 <!-- 🔹 Tambahan tempat untuk menampilkan hasil -->
 <div id="preview"></div>
