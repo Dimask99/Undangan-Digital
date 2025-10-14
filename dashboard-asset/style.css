@@ -57,3 +57,15 @@ button:hover {
   text-align: center;
   font-weight: bold;
 }
+
+input[type="file"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+}
+
+#preview img {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
