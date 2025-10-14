@@ -1,9 +1,8 @@
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background: url("../Alam.jpg") no-repeat center center fixed;
+  background-image: url('Alam.jpg');
   background-size: cover;
-  margin: 0;
-  padding: 0;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .container {
