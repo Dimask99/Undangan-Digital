@@ -1,0 +1,26 @@
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz8zugc5zceMzhoeaPV79vn1cCLL52WFIN09vNkAnh5QcTA9up-yNeZRzyJjDiDUPs/exec";
+
+document.getElementById('formData').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const data = {
+    tanggal: document.getElementById('tanggal').value,
+    item: document.getElementById('item').value,
+    qty: document.getElementById('qty').value,
+    keterangan: document.getElementById('keterangan').value
+  };
+
+  try {
+    const response = await fetch(APP_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    document.getElementById('status').innerText = "✅ Data berhasil dikirim!";
+    document.getElementById('formData').reset();
+  } catch (error) {
+    document.getElementById('status').innerText = "❌ Gagal mengirim data.";
+  }
+});
