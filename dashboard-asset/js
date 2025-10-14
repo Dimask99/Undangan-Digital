@@ -1,40 +1,45 @@
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz8zugc5zceMzhoeaPV79vn1cCLL52WFIN09vNkAnh5QcTA9up-yNeZRzyJjDiDUPs/exec";
 
-const form = document.getElementById("formData");
-const statusDiv = document.getElementById("status");
-const preview = document.getElementById("preview");
-
-form.addEventListener("submit", function (e) {
+document.getElementById('formData').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const tanggal = document.getElementById("tanggal").value;
-  const item = document.getElementById("item").value;
-  const qty = document.getElementById("qty").value;
-  const keterangan = document.getElementById("keterangan").value;
-  const gambar = document.getElementById("gambar").files[0];
+  const fotoFile = document.getElementById('foto').files[0];
 
-  if (gambar) {
-    const reader = new FileReader();
-    reader.onload = function (event) {
-      const img = document.createElement("img");
-      img.src = event.target.result;
-      img.style.maxWidth = "200px";
-      img.style.marginTop = "10px";
-      preview.innerHTML = ""; // hapus preview lama
-      preview.appendChild(img);
-    };
-    reader.readAsDataURL(gambar);
-  } else {
-    preview.innerHTML = "<p>Tidak ada gambar diunggah.</p>";
+  // Jika tidak ada foto, kirim data biasa
+  if (!fotoFile) {
+    sendData(null);
+    return;
   }
 
-  // tampilkan status
-  statusDiv.innerHTML = `
-    <p><strong>Tanggal:</strong> ${tanggal}</p>
-    <p><strong>Item:</strong> ${item}</p>
-    <p><strong>Qty:</strong> ${qty}</p>
-    <p><strong>Keterangan:</strong> ${keterangan}</p>
-  `;
-
-  form.reset();
+  // Ubah foto menjadi Base64
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    const base64Foto = reader.result.split(',')[1]; // hapus prefix data:image
+    sendData(base64Foto);
+  };
+  reader.readAsDataURL(fotoFile);
 });
+
+async function sendData(fotoBase64) {
+  const data = {
+    tanggal: document.getElementById('tanggal').value,
+    item: document.getElementById('item').value,
+    qty: document.getElementById('qty').value,
+    keterangan: document.getElementById('keterangan').value,
+    foto: fotoBase64 || "" // bisa kosong
+  };
+
+  try {
+    await fetch(APP_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    document.getElementById('status').innerText = "✅ Data berhasil dikirim!";
+    document.getElementById('formData').reset();
+  } catch (error) {
+    document.getElementById('status').innerText = "❌ Gagal mengirim data.";
+  }
+}
