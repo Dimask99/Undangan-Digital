@@ -11,21 +11,21 @@
   
   <div class="container">
     <h1>📦 Dashboard Barang</h1>
-    <form id="formData">
+    <form id="assetForm">
   <label>Tanggal</label>
-  <input type="date" id="tanggal" required>
+  <input type="date" name="tanggal" required>
 
   <label>Item</label>
-  <input type="text" id="item" required>
+  <input type="text" name="item" required>
 
   <label>Qty</label>
-  <input type="number" id="qty" required>
+  <input type="number" name="qty" required>
 
   <label>Keterangan</label>
-  <textarea id="keterangan"></textarea>
+  <textarea name="keterangan"></textarea>
 
   <label>Foto Barang</label>
-  <input type="file" id="foto" accept="image/*">
+  <input type="file" name="foto" accept="image/*">
 
   <button type="submit">Simpan</button>
 </form>
@@ -34,6 +34,21 @@
 
 <!-- 🔹 Tambahan tempat untuk menampilkan hasil -->
 <div id="preview"></div>
+
+    <script>
+document.getElementById("assetForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+  let formData = new FormData(this);
+  
+  const response = await fetch("YOUR_SCRIPT_URL_HERE", { // nanti diganti URL Apps Script
+    method: "POST",
+    body: formData
+  });
+
+  const result = await response.text();
+  alert(result);
+});
+</script>
 
   <script src="../style/js/app.js"></script>
 </body>
