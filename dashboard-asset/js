@@ -3,43 +3,30 @@ const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz8zugc5zceMzhoe
 document.getElementById('formData').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const fotoFile = document.getElementById('foto').files[0];
+  const file = document.getElementById('foto').files[0];
+  let base64Image = "";
 
-  // Jika tidak ada foto, kirim data biasa
-  if (!fotoFile) {
-    sendData(null);
-    return;
+  if (file) {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    base64Image = await new Promise((resolve) => {
+      reader.onload = () => resolve(reader.result.split(",")[1]);
+    });
   }
 
-  // Ubah foto menjadi Base64
-  const reader = new FileReader();
-  reader.onloadend = () => {
-    const base64Foto = reader.result.split(',')[1]; // hapus prefix data:image
-    sendData(base64Foto);
-  };
-  reader.readAsDataURL(fotoFile);
-});
-
-async function sendData(fotoBase64) {
-  const data = {
-    tanggal: document.getElementById('tanggal').value,
-    item: document.getElementById('item').value,
-    qty: document.getElementById('qty').value,
-    keterangan: document.getElementById('keterangan').value,
-    foto: fotoBase64 || "" // bisa kosong
-  };
+  const formData = new FormData();
+  formData.append("tanggal", document.getElementById('tanggal').value);
+  formData.append("item", document.getElementById('item').value);
+  formData.append("qty", document.getElementById('qty').value);
+  formData.append("keterangan", document.getElementById('keterangan').value);
+  formData.append("image", base64Image);
 
   try {
-    await fetch(APP_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-
-    document.getElementById('status').innerText = "✅ Data berhasil dikirim!";
+    const response = await fetch(APP_SCRIPT_URL, { method: "POST", body: formData });
+    const text = await response.text();
+    document.getElementById('status').innerText = text;
     document.getElementById('formData').reset();
   } catch (error) {
     document.getElementById('status').innerText = "❌ Gagal mengirim data.";
   }
-}
+});
