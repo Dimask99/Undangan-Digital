@@ -29,12 +29,12 @@ form.addEventListener("submit", async (e) => {
 
   try {
     // Save data to Firestore
-    await addDoc(collection(window.db, "assets"), data);
+    await window.addDoc(window.collection(window.db, "assets"), data);
 
     // Upload foto to Firebase Storage if exists
     if (fotoFile) {
-      const storageRef = ref(window.storage, `assets/${data.item}.jpg`);
-      await uploadBytes(storageRef, fotoFile);
+      const storageRef = window.ref(window.storage, `assets/${data.item}.jpg`);
+      await window.uploadBytes(storageRef, fotoFile);
     }
 
     document.getElementById('status').innerText = "✅ Data berhasil dikirim!";
