@@ -114,10 +114,6 @@
     const db = getFirestore(app);
     const storage = getStorage(app);
 
-    // Import additional functions
-    const { collection, addDoc } = await import("https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js");
-    const { ref, uploadBytes } = await import("https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js");
-
     window.firebaseApp = app;
     window.db = db;
     window.storage = storage;
