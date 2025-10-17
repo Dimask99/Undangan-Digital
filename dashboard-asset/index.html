@@ -90,58 +90,9 @@
     <p>Data akan otomatis tersimpan di Google Sheet & foto di Google Drive.</p>
   </div>
 
-  <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwjsZvKw71THdomH18AXMR-GI0aETKI30Erz7xK19lT4vSeaaaPFdSZuPIJm2UU09DG/exec";
-    const form = document.getElementById("formAsset");
-    const fotoInput = document.getElementById("foto");
-    const preview = document.getElementById("preview");
-    let fotoBase64 = "";
+  <div id="status"></div>
 
-    // Preview foto
-    fotoInput.addEventListener("change", function() {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          fotoBase64 = e.target.result.split(",")[1]; // ambil bagian base64 saja
-          preview.innerHTML = `<img src="${e.target.result}" alt="Preview Foto">`;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    // Submit form
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const data = {
-        tanggal: document.getElementById("tanggal").value,
-        item: document.getElementById("item").value,
-        qty: document.getElementById("qty").value,
-        keterangan: document.getElementById("keterangan").value,
-        foto: fotoBase64
-      };
-
-      try {
-        const response = await fetch(scriptURL, {
-          method: "POST",
-          mode: "cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
-
-        const result = await response.json();
-        if (result.status === "ok") {
-          alert("✅ Data berhasil dikirim!");
-          form.reset();
-          preview.innerHTML = "";
-        } else {
-          alert("⚠ Gagal: " + result.message);
-        }
-      } catch (err) {
-        alert("❌ Error koneksi: " + err.message);
-      }
-    });
-  </script>
+  <script src="js"></script>
+  <link rel="stylesheet" href="style.css">
 </body>
 </html>

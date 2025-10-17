@@ -1,6 +1,6 @@
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwjsZvKw71THdomH18AXMR-GI0aETKI30Erz7xK19lT4vSeaaaPFdSZuPIJm2UU09DG/exec";
 
-const form = document.getElementById("formData");
+const form = document.getElementById("formAsset");
 const fotoInput = document.getElementById("foto");
 const preview = document.getElementById("preview");
 let fotoBase64 = "";
@@ -31,24 +31,23 @@ form.addEventListener("submit", async (e) => {
   };
 
   try {
-  const response = await fetch(APP_SCRIPT_URL, {
-    method: "POST",
-    mode: "cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  });
+    const response = await fetch(APP_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify(data)
+    });
 
-  const text = await response.text();
-  const result = JSON.parse(text.match(/JSON\.stringify\((.*)\)/)[1]);
-  if (result.status === "ok") {
-    document.getElementById('status').innerText = "✅ Data berhasil dikirim!";
-    form.reset();
-    preview.innerHTML = "";
-  } else {
-    document.getElementById('status').innerText = "⚠ Gagal: " + result.message;
+    const text = await response.text();
+    const result = JSON.parse(text.match(/JSON\.stringify\((.*)\)/)[1]);
+    if (result.status === "ok") {
+      document.getElementById('status').innerText = "✅ Data berhasil dikirim!";
+      form.reset();
+      preview.innerHTML = "";
+    } else {
+      document.getElementById('status').innerText = "⚠ Gagal: " + result.message;
+    }
+  } catch (error) {
+    document.getElementById('status').innerText = "❌ Error koneksi: " + error.message;
   }
-} catch (error) {
-  document.getElementById('status').innerText = "❌ Error koneksi: " + error.message;
-}
 
 });
