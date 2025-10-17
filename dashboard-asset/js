@@ -33,12 +33,11 @@ form.addEventListener("submit", async (e) => {
   try {
     const response = await fetch(APP_SCRIPT_URL, {
       method: "POST",
-      headers: { "Content-Type": "text/plain" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     });
 
-    const text = await response.text();
-    const result = JSON.parse(text.match(/JSON\.stringify\((.*)\)/)[1]);
+    const result = await response.json();
     if (result.status === "ok") {
       document.getElementById('status').innerText = "✅ Data berhasil dikirim!";
       form.reset();
