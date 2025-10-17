@@ -1,4 +1,4 @@
-const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzs2UCzb_5i8hmYuTEQI6Q-l__pj0tj35VRcVji7xDLQf-7nfmt2fB5K_0uFUGa5wlm/exec";
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyNX2H29sSySJ_gfGpMJ7WR7B20FzY2IthoirBGmuyihIgWHETpzRe3EJq2vObetQ8E/exec";
 
 const form = document.getElementById("formAsset");
 const fotoInput = document.getElementById("foto");
