@@ -91,7 +91,7 @@
   </div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbx3rXDBZZ6MmtqesXeR6fCAjOedys3_BBLkh2p1miBl8SqP5iHIoKkM_CpnY9mBaEZ_/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwjsZvKw71THdomH18AXMR-GI0aETKI30Erz7xK19lT4vSeaaaPFdSZuPIJm2UU09DG/exec";
     const form = document.getElementById("formAsset");
     const fotoInput = document.getElementById("foto");
     const preview = document.getElementById("preview");
@@ -104,7 +104,7 @@
         const reader = new FileReader();
         reader.onload = function(e) {
           fotoBase64 = e.target.result.split(",")[1]; // ambil bagian base64 saja
-          preview.innerHTML = <img src="${e.target.result}" alt="Preview Foto">;
+          preview.innerHTML = `<img src="${e.target.result}" alt="Preview Foto">`;
         };
         reader.readAsDataURL(file);
       }
