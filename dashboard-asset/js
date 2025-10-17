@@ -1,17 +1,15 @@
-const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzy1ERrGN_YncxbdkBzsUn-lWOmSOnTOFuOJo6R-Bg1QxepswBlmu1WY6rx1TNxcB8R/exec";
-
 const form = document.getElementById("formAsset");
 const fotoInput = document.getElementById("foto");
 const preview = document.getElementById("preview");
-let fotoBase64 = "";
+let fotoFile = null;
 
 // Preview foto
 fotoInput.addEventListener("change", function() {
   const file = this.files[0];
   if (file) {
+    fotoFile = file;
     const reader = new FileReader();
     reader.onload = function(e) {
-      fotoBase64 = e.target.result.split(",")[1]; // ambil bagian base64 saja
       preview.innerHTML = `<img src="${e.target.result}" alt="Preview Foto">`;
     };
     reader.readAsDataURL(file);
@@ -26,27 +24,24 @@ form.addEventListener("submit", async (e) => {
     tanggal: document.getElementById("tanggal").value,
     item: document.getElementById("item").value,
     qty: document.getElementById("qty").value,
-    keterangan: document.getElementById("keterangan").value,
-    foto: fotoBase64
+    keterangan: document.getElementById("keterangan").value
   };
 
   try {
-    const response = await fetch(APP_SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
+    // Save data to Firestore
+    await addDoc(collection(window.db, "assets"), data);
 
-    const result = await response.json();
-    if (result.status === "ok") {
-      document.getElementById('status').innerText = "✅ Data berhasil dikirim!";
-      form.reset();
-      preview.innerHTML = "";
-    } else {
-      document.getElementById('status').innerText = "⚠ Gagal: " + result.message;
+    // Upload foto to Firebase Storage if exists
+    if (fotoFile) {
+      const storageRef = ref(window.storage, `assets/${data.item}.jpg`);
+      await uploadBytes(storageRef, fotoFile);
     }
-  } catch (error) {
-    document.getElementById('status').innerText = "❌ Error koneksi: " + error.message;
-  }
 
+    document.getElementById('status').innerText = "✅ Data berhasil dikirim!";
+    form.reset();
+    preview.innerHTML = "";
+    fotoFile = null;
+  } catch (error) {
+    document.getElementById('status').innerText = "❌ Error: " + error.message;
+  }
 });
