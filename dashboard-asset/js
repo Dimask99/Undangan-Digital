@@ -1,32 +1,52 @@
-const APP_SCRIPT_URL = " https://script.google.com/macros/s/AKfycbx3rXDBZZ6MmtqesXeR6fCAjOedys3_BBLkh2p1miBl8SqP5iHIoKkM_CpnY9mBaEZ_/exec";
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwjsZvKw71THdomH18AXMR-GI0aETKI30Erz7xK19lT4vSeaaaPFdSZuPIJm2UU09DG/exec";
 
-document.getElementById('formData').addEventListener('submit', async (e) => {
-  e.preventDefault();
+const form = document.getElementById("formData");
+const fotoInput = document.getElementById("foto");
+const preview = document.getElementById("preview");
+let fotoBase64 = "";
 
-  const file = document.getElementById('foto').files[0];
-  let base64Image = "";
-
+// Preview foto
+fotoInput.addEventListener("change", function() {
+  const file = this.files[0];
   if (file) {
     const reader = new FileReader();
+    reader.onload = function(e) {
+      fotoBase64 = e.target.result.split(",")[1]; // ambil bagian base64 saja
+      preview.innerHTML = `<img src="${e.target.result}" alt="Preview Foto">`;
+    };
     reader.readAsDataURL(file);
-    base64Image = await new Promise((resolve) => {
-      reader.onload = () => resolve(reader.result.split(",")[1]);
-    });
   }
+});
 
-  const formData = new FormData();
-  formData.append("tanggal", document.getElementById('tanggal').value);
-  formData.append("item", document.getElementById('item').value);
-  formData.append("qty", document.getElementById('qty').value);
-  formData.append("keterangan", document.getElementById('keterangan').value);
-  formData.append("image", base64Image);
+// Submit form
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const data = {
+    tanggal: document.getElementById("tanggal").value,
+    item: document.getElementById("item").value,
+    qty: document.getElementById("qty").value,
+    keterangan: document.getElementById("keterangan").value,
+    foto: fotoBase64
+  };
 
   try {
-    const response = await fetch(APP_SCRIPT_URL, { method: "POST", body: formData });
-    const text = await response.text();
-    document.getElementById('status').innerText = text;
-    document.getElementById('formData').reset();
+    const response = await fetch(APP_SCRIPT_URL, {
+      method: "POST",
+      mode: "cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    if (result.status === "ok") {
+      document.getElementById('status').innerText = "✅ Data berhasil dikirim!";
+      form.reset();
+      preview.innerHTML = "";
+    } else {
+      document.getElementById('status').innerText = "⚠ Gagal: " + result.message;
+    }
   } catch (error) {
-    document.getElementById('status').innerText = "❌ Gagal mengirim data.";
+    document.getElementById('status').innerText = "❌ Error koneksi: " + error.message;
   }
 });
