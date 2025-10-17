@@ -114,16 +114,55 @@
     const db = getFirestore(app);
     const storage = getStorage(app);
 
-    window.firebaseApp = app;
-    window.db = db;
-    window.storage = storage;
-    window.collection = collection;
-    window.addDoc = addDoc;
-    window.ref = ref;
-    window.uploadBytes = uploadBytes;
-  </script>
+    // Form handling code
+    const form = document.getElementById("formAsset");
+    const fotoInput = document.getElementById("foto");
+    const preview = document.getElementById("preview");
+    let fotoFile = null;
 
-  <script src="js"></script>
+    // Preview foto
+    fotoInput.addEventListener("change", function() {
+      const file = this.files[0];
+      if (file) {
+        fotoFile = file;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.innerHTML = `<img src="${e.target.result}" alt="Preview Foto">`;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Submit form
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = {
+        tanggal: document.getElementById("tanggal").value,
+        item: document.getElementById("item").value,
+        qty: document.getElementById("qty").value,
+        keterangan: document.getElementById("keterangan").value
+      };
+
+      try {
+        // Save data to Firestore
+        await addDoc(collection(db, "assets"), data);
+
+        // Upload foto to Firebase Storage if exists
+        if (fotoFile) {
+          const storageRef = ref(storage, `assets/${data.item}.jpg`);
+          await uploadBytes(storageRef, fotoFile);
+        }
+
+        document.getElementById('status').innerText = "✅ Data berhasil dikirim!";
+        form.reset();
+        preview.innerHTML = "";
+        fotoFile = null;
+      } catch (error) {
+        document.getElementById('status').innerText = "❌ Error: " + error.message;
+      }
+    });
+  </script>
   <link rel="stylesheet" href="style.css">
 </body>
 </html>
